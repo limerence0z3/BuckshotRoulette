@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <title>game</title>
+  <head>
+    <style>
+      body {
+        background-color: black;
+      }
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      div img {
+        margin: auto;
+        width: 200px;
+        height: auto;
+      }
+      p.hearts {
+        display: flex;
+        justify-content: center;
+      }
+      p.hearts img {
+        width: 30px;
+      }
+      div table {
+        border: 1px solid white;
+        width: 800px;
+        height: 100px;
+        /* 表格邊框合在一起 */
+        border-collapse: collapse;
+      }
+      div table td {
+        width: 200px;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <!-- 惡魔圖片 -->
+      <img src="deemo.jpg" alt="deemo" />
+    </div>
+    <!-- 惡魔血量 -->
+    <p class="hearts">
+      <img src="heart.png" alt="deemoHeart" />
+      <img src="heart.png" alt="deemoHeart" />
+      <img src="heart.png" alt="deemoHeart" />
+      <img src="heart.png" alt="deemoHeart" />
+      <img src="heart.png" alt="deemoHeart" />
+    </p>
+    <!-- 霰彈槍 -->
+    <div>
+      <img
+        src="shotgun.png"
+        alt="shotgun"
+        style="width: 40px; margin-top: 0px; cursor: pointer"
+      />
+    </div>
+    <!-- 玩家血量 -->
+    <p class="hearts">
+      <img src="heart.png" alt="playerHeart" />
+      <img src="heart.png" alt="playerHeart" />
+      <img src="heart.png" alt="playerHeart" />
+      <img src="heart.png" alt="playerHeart" />
+      <img src="heart.png" alt="playerHeart" />
+    </p>
+    <!-- 玩家名稱 -->
+    <div>
+      <h1
+        style="
+          color: white;
+          margin-top: 0px;
+          font-family: Papyrus;
+          font: size 50px;
+        "
+      >
+        player
+      </h1>
+    </div>
+    <!-- 道具存放表格 -->
+    <div>
+      <table border="1">
+        <tr>
+          <td><img src="cigarette.png" alt="cigarette" style="width: 100%;" /></td>
+          <td><img src="magnifier.png" alt="magnifier" style="width: 100%;" /></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
