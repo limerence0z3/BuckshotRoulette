@@ -1,97 +1,141 @@
 <!DOCTYPE html>
 <html>
-  <title>game</title>
-  <head>
-    <style>
-      body {
-        background-color: black;
-      }
-      div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      div img {
-        margin: auto;
-        width: 200px;
-        height: auto;
-      }
-      p.hearts {
-        display: flex;
-        justify-content: center;
-      }
-      p.hearts img {
-        width: 30px;
-      }
-      div table {
-        border: 1px solid white;
-        width: 800px;
-        height: 100px;
-        /* 表格邊框合在一起 */
-        border-collapse: collapse;
-      }
-      div table td {
-        width: 200px;
-        height: 50px;
-      }
-    </style>
-  </head>
-  <body>
-    <div>
-      <!-- 惡魔圖片 -->
-      <img src="deemo.jpg" alt="deemo" />
-    </div>
-    <!-- 惡魔血量 -->
-    <p class="hearts">
-      <img src="heart.png" alt="deemoHeart" />
-      <img src="heart.png" alt="deemoHeart" />
-      <img src="heart.png" alt="deemoHeart" />
-      <img src="heart.png" alt="deemoHeart" />
-      <img src="heart.png" alt="deemoHeart" />
-    </p>
-    <!-- 霰彈槍 -->
-    <div>
-      <img
-        src="shotgun.png"
-        alt="shotgun"
-        style="width: 40px; margin-top: 0px; cursor: pointer"
-      />
-    </div>
-    <!-- 玩家血量 -->
-    <p class="hearts">
-      <img src="heart.png" alt="playerHeart" />
-      <img src="heart.png" alt="playerHeart" />
-      <img src="heart.png" alt="playerHeart" />
-      <img src="heart.png" alt="playerHeart" />
-      <img src="heart.png" alt="playerHeart" />
-    </p>
-    <!-- 玩家名稱 -->
-    <div>
-      <h1
-        style="
+<title>game</title>
+
+<head>
+  <style>
+    body {
+      background-color: black;
+    }
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    div img {
+      margin: auto;
+      width: 200px;
+      height: auto;
+    }
+
+    div img[alt="shotgun"] {
+      position: relative;
+      width: 40px;
+      margin-top: 0px;
+      margin-left: 100px;
+      margin-right: 100px;
+      margin-bottom: 0px;
+      cursor: pointer;
+    }
+
+    p.hearts {
+      display: flex;
+      justify-content: center;
+    }
+
+    p.hearts img {
+      width: 30px;
+    }
+
+    div table {
+      border: 1px solid white;
+      width: 800px;
+      height: 100px;
+      /* 表格邊框合在一起 */
+      border-collapse: collapse;
+    }
+
+    div table td {
+      width: 200px;
+      height: 50px;
+    }
+
+    div table td img {
+      cursor: pointer;
+    }
+
+    h1 {
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <!-- 惡魔圖片 -->
+    <img src="demon.jpg" alt="demon" />
+  </div>
+  <!-- 惡魔血量 -->
+  <p class="hearts">
+    <img src="heart.png" alt="demonHeart" />
+    <img src="heart.png" alt="demoHeart" />
+    <img src="heart.png" alt="demoHeart" />
+    <img src="heart.png" alt="demoHeart" />
+    <img src="heart.png" alt="demoHeart" />
+  </p>
+  <!-- 霰彈槍 -->
+  <div>
+    <h1 id="shootingPlayer" style="margin: 0; display: none; cursor: pointer;">射擊自己</h1>
+    <img id="shotgun" src="shotgun.png" alt="shotgun" />
+    <h1 id="shootingDemon" style="margin: 0; display: none; cursor: pointer;">射擊敵人</h1>
+  </div>
+  <!-- 玩家血量 -->
+  <p class="hearts">
+    <img src="heart.png" alt="playerHeart" />
+    <img src="heart.png" alt="playerHeart" />
+    <img src="heart.png" alt="playerHeart" />
+    <img src="heart.png" alt="playerHeart" />
+    <img src="heart.png" alt="playerHeart" />
+  </p>
+  <!-- 玩家名稱 -->
+  <div>
+    <h1 style="
           color: white;
           margin-top: 0px;
           font-family: Papyrus;
           font: size 50px;
-        "
-      >
-        player
-      </h1>
-    </div>
-    <!-- 道具存放表格 -->
-    <div>
-      <table border="1">
-        <tr>
-          <td><img src="cigarette.png" alt="cigarette" style="width: 100%;" /></td>
-          <td><img src="magnifier.png" alt="magnifier" style="width: 100%;" /></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
-    </div>
-  </body>
+        ">
+      player
+    </h1>
+  </div>
+  <!-- 道具存放表格 -->
+  <div>
+    <table border="1">
+      <tr>
+        <td><img src="cigarette.png" alt="cigarette" style="width: 100%;" /></td>
+        <td><img src="magnifier.png" alt="magnifier" style="width: 100%;" /></td>
+        <td><img src="beer.png" alt="beer" style="width: 100%;" /></td>
+        <td><img src="BlueBullet.png" alt="BlueBullet" style="width: 100%;" /></td>
+        <td><img src="chocolate.png" alt="chocolate" style="width: 100%;" /></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <!-- js -->
+  <script>
+    // 控制霰彈槍點擊後顯示要射誰
+    const shotgun = document.getElementById('shotgun');
+    const shootingPlayer = document.getElementById('shootingPlayer');
+    const shootingDemon = document.getElementById('shootingDemon');
+    let isShootingVisible = false;
+
+    shotgun.addEventListener('click', () => {
+      if (!isShootingVisible) {
+        shootingPlayer.style.display = 'block';
+        shootingDemon.style.display = 'block';
+        isShootingVisible = true;
+      } else {
+        shootingPlayer.style.display = 'none';
+        shootingDemon.style.display = 'none';
+        isShootingVisible = false;
+      }
+    });
+
+  </script>
+</body>
+
 </html>
