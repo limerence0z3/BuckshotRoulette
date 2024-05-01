@@ -85,10 +85,16 @@
         left: 30px;
         font-size: 25px;
       }
-      #ammoCount {
+      .ammoMessage {
         position: absolute;
         top: 10px;
-        right: 100px;
+        right: 200px;
+        color: white;
+      }
+      #ammoCount {
+        color: white;
+      }
+      #thisBulletType {
         color: white;
       }
       .hover:hover {
@@ -151,10 +157,19 @@
       6.惡魔兩滴血以下時對你造成雙倍傷害<br />
       7.不同道具1回合至多使用1次<br />
       8.開始或子彈射完時給5個隨機道具<br />
+      9.點擊槍後可以選擇射擊誰<br />
+      10.點擊道具後使用道具
     </h1>
-    <!-- 當前子彈剩餘量文字 -->
-    <h1 id="ammoCount">當前子彈剩餘:10</h1>
-    <!-- <h1 id="thisBulletType">此發為:</h1> -->
+    <div>
+      <span class="ammoMessage">
+        <!-- 當前子彈剩餘量文字 -->
+        <h1 id="ammoCount">當前子彈剩餘:10</h1>
+        <!-- 此發子彈類型 -->
+        <h1 id="thisBulletType">此發為:</h1>
+        <!-- 道具效果 -->
+        <h1 id="itemEffect">道具:</h1>
+      </span>
+    </div>
     <!-- 霰彈槍 -->
     <div>
       <h1
@@ -192,9 +207,14 @@
           <td>
             <!-- 香菸道具 -->
             <span class="tooltip">
-              <img src="cigarette.png" alt="cigarette" class="hover" />
+              <img
+                src="cigarette.png"
+                alt="cigarette"
+                class="hover"
+                onclick="useCigarette()"
+              />
               <span class="tooltiptext">回復一滴血</span>
-              <span class="item-count">2</span>
+              <span id="cigaretteCount" class="item-count">2</span>
             </span>
           </td>
           <!-- 放大鏡道具 -->
@@ -243,7 +263,11 @@
       let DemonHealth = 5; //惡魔血量
       let playerHealth = 5; //玩家血量
       let bullets = []; //槍裡的子彈 0是空彈 1是實彈
-
+      let cigarettesTotal = 0;
+      let magnifierTotal = 0;
+      let beerTotal = 0;
+      let BlueBulletTotla = 0;
+      let chocolateTotal = 0;
       // 在遊戲開始時進行子彈的隨機排列
       window.onload = function () {
         shuffleBullets();
@@ -266,7 +290,10 @@
       function shootDemon() {
         const demonHeartImages = document.querySelectorAll(".demonHeart");
         const firstDemonHeart = demonHeartImages[0];
-
+        //重置道具效果
+        reloadItemEffection();
+        //判斷此發為空彈還是實彈
+        thisBulletType(bullets[0]);
         //如果子彈是1就扣血否則不扣血，並都會退出當前子彈
         if (bullets[0] === 1) {
           firstDemonHeart.remove();
@@ -287,6 +314,11 @@
       function shootPlayer() {
         const playerHeartImages = document.querySelectorAll(".playerHeart");
         const firstPlayerHeart = playerHeartImages[0];
+        //重置道具效果
+        reloadItemEffection();
+        //判斷此發為空彈還是實彈
+        thisBulletType(bullets[0]);
+        //如果子彈是1就扣血否則不扣血，並都會退出當前子彈
         if (bullets[0] === 1) {
           firstPlayerHeart.remove();
           bullets.shift();
@@ -306,6 +338,17 @@
         const ammoCountElement = document.getElementById("ammoCount");
         ammoCountElement.textContent = "當前子彈剩餘：" + bullets.length;
       }
+      //顯示此發為空彈還是實彈
+      function thisBulletType(bullets) {
+        let BulletType = "";
+        if (bullets === 1) {
+          BulletType = "實彈";
+        } else {
+          BulletType = "空彈";
+        }
+        const thisBulletTypeElement = document.getElementById("thisBulletType");
+        thisBulletTypeElement.textContent = "此發為: " + BulletType;
+      }
 
       // 取0或1隨機數 用來隨機裝填子彈
       function getRandomInt() {
@@ -323,6 +366,44 @@
       // 重新裝填子彈的函數
       function reloadBullets() {
         shuffleBullets(); //重新進行子彈的隨機排列
+      }
+      //重置道具效果
+      function reloadItemEffection() {
+        let ItemEffection = document.getElementById("itemEffect");
+        ItemEffection.textContent = "道具: ";
+      }
+
+      // 點擊香菸道具時觸發的函數，玩家回復一滴血
+      function useCigarette() {
+        const playerHeartImages = document.querySelectorAll(".playerHeart");
+        const lastPlayerHeart = playerHeartImages[playerHeartImages.length - 1];
+        let ItemEffection = document.getElementById("itemEffect");
+        const newCigaretteCount = document.getElementById("cigaretteCount");
+
+        // 先顯示道具效果
+        ItemEffection.textContent = "道具: ";
+
+        // 檢查玩家血量是否已滿
+        if (playerHeartImages.length < 5) {
+          // 添加一滴血
+          const newHeart = document.createElement("img");
+          newHeart.src = "heart.png";
+          newHeart.alt = "playerHeart";
+          newHeart.className = "playerHeart";
+          lastPlayerHeart.parentNode.insertBefore(
+            newHeart,
+            lastPlayerHeart.nextSibling
+          );
+          // 更新玩家血量
+          playerHealth += 1;
+          // 更新道具效果文字
+          ItemEffection.innerText += "回復了一滴血";
+        } else {
+          // 更新道具效果文字
+          ItemEffection.innerText += "浪費了一包菸...";
+        }
+        // newCigaretteCount -= 1;
+        // newCigaretteCount;
       }
     </script>
   </body>
