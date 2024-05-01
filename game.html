@@ -1,141 +1,329 @@
 <!DOCTYPE html>
 <html>
-<title>game</title>
+  <title>game</title>
 
-<head>
-  <style>
-    body {
-      background-color: black;
-    }
-
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    div img {
-      margin: auto;
-      width: 200px;
-      height: auto;
-    }
-
-    div img[alt="shotgun"] {
-      position: relative;
-      width: 40px;
-      margin-top: 0px;
-      margin-left: 100px;
-      margin-right: 100px;
-      margin-bottom: 0px;
-      cursor: pointer;
-    }
-
-    p.hearts {
-      display: flex;
-      justify-content: center;
-    }
-
-    p.hearts img {
-      width: 30px;
-    }
-
-    div table {
-      border: 1px solid white;
-      width: 800px;
-      height: 100px;
-      /* 表格邊框合在一起 */
-      border-collapse: collapse;
-    }
-
-    div table td {
-      width: 200px;
-      height: 50px;
-    }
-
-    div table td img {
-      cursor: pointer;
-    }
-
-    h1 {
-      color: white;
-    }
-  </style>
-</head>
-
-<body>
-  <div>
-    <!-- 惡魔圖片 -->
-    <img src="demon.jpg" alt="demon" />
-  </div>
-  <!-- 惡魔血量 -->
-  <p class="hearts">
-    <img src="heart.png" alt="demonHeart" />
-    <img src="heart.png" alt="demoHeart" />
-    <img src="heart.png" alt="demoHeart" />
-    <img src="heart.png" alt="demoHeart" />
-    <img src="heart.png" alt="demoHeart" />
-  </p>
-  <!-- 霰彈槍 -->
-  <div>
-    <h1 id="shootingPlayer" style="margin: 0; display: none; cursor: pointer;">射擊自己</h1>
-    <img id="shotgun" src="shotgun.png" alt="shotgun" />
-    <h1 id="shootingDemon" style="margin: 0; display: none; cursor: pointer;">射擊敵人</h1>
-  </div>
-  <!-- 玩家血量 -->
-  <p class="hearts">
-    <img src="heart.png" alt="playerHeart" />
-    <img src="heart.png" alt="playerHeart" />
-    <img src="heart.png" alt="playerHeart" />
-    <img src="heart.png" alt="playerHeart" />
-    <img src="heart.png" alt="playerHeart" />
-  </p>
-  <!-- 玩家名稱 -->
-  <div>
-    <h1 style="
-          color: white;
-          margin-top: 0px;
-          font-family: Papyrus;
-          font: size 50px;
-        ">
-      player
-    </h1>
-  </div>
-  <!-- 道具存放表格 -->
-  <div>
-    <table border="1">
-      <tr>
-        <td><img src="cigarette.png" alt="cigarette" style="width: 100%;" /></td>
-        <td><img src="magnifier.png" alt="magnifier" style="width: 100%;" /></td>
-        <td><img src="beer.png" alt="beer" style="width: 100%;" /></td>
-        <td><img src="BlueBullet.png" alt="BlueBullet" style="width: 100%;" /></td>
-        <td><img src="chocolate.png" alt="chocolate" style="width: 100%;" /></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </table>
-  </div>
-  <!-- js -->
-  <script>
-    // 控制霰彈槍點擊後顯示要射誰
-    const shotgun = document.getElementById('shotgun');
-    const shootingPlayer = document.getElementById('shootingPlayer');
-    const shootingDemon = document.getElementById('shootingDemon');
-    let isShootingVisible = false;
-
-    shotgun.addEventListener('click', () => {
-      if (!isShootingVisible) {
-        shootingPlayer.style.display = 'block';
-        shootingDemon.style.display = 'block';
-        isShootingVisible = true;
-      } else {
-        shootingPlayer.style.display = 'none';
-        shootingDemon.style.display = 'none';
-        isShootingVisible = false;
+  <head>
+    <style>
+      body {
+        background-color: black;
+        font-family: Papyrus, cursive;
       }
-    });
 
-  </script>
-</body>
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
+      div img {
+        margin: auto;
+        width: 200px;
+        height: auto;
+      }
+
+      div img[alt="shotgun"] {
+        position: relative;
+        width: 40px;
+        margin-top: 0px;
+        margin-left: 100px;
+        margin-right: 100px;
+        margin-bottom: 0px;
+        cursor: pointer;
+      }
+      div img[alt="Demon"] {
+        position: relative;
+        width: 40px;
+        margin-top: 0px;
+        margin-left: 100px;
+        margin-right: 100px;
+        margin-bottom: 0px;
+      }
+      p.hearts {
+        display: flex;
+        justify-content: center;
+      }
+
+      p.hearts img {
+        width: 30px;
+      }
+
+      div table {
+        border: 1px solid white;
+        width: 600px;
+        height: 100px;
+        /* 表格邊框合在一起 */
+        border-collapse: collapse;
+      }
+
+      div table td {
+        width: 100px;
+        height: 50px;
+        position: relative; /* 使用相对定位 */
+      }
+
+      div table td img {
+        cursor: pointer;
+        width: 100px;
+        height: 100px;
+      }
+
+      h1 {
+        color: white;
+      }
+
+      .item-count {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        color: white;
+        font-size: 40px;
+      }
+      .rules {
+        color: white;
+        position: absolute;
+        top: 10px;
+        left: 30px;
+        font-size: 25px;
+      }
+      #ammoCount {
+        position: absolute;
+        top: 10px;
+        right: 100px;
+        color: white;
+      }
+      .hover:hover {
+        opacity: 0.8;
+      }
+
+      /* Tooltip container */
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* Tooltip text */
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+        color: #fff;
+        text-align: center;
+        font-size: 25px;
+        padding: 5px 0;
+        border-radius: 6px;
+        width: 120px;
+        background-color: black;
+
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 1;
+      }
+
+      /* Show the tooltip text when you mouse over the tooltip container */
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <!-- 惡魔圖片 -->
+      <img src="demon.jpg" alt="demon" />
+    </div>
+    <!-- 惡魔血量 -->
+    <p class="hearts">
+      <img class="demonHeart" src="heart.png" alt="demonHeart" />
+      <img class="demonHeart" src="heart.png" alt="demonHeart" />
+      <img class="demonHeart" src="heart.png" alt="demonHeart" />
+      <img class="demonHeart" src="heart.png" alt="demonHeart" />
+      <img class="demonHeart" src="heart.png" alt="demonHeart" />
+    </p>
+    <!-- 遊戲說明 -->
+    <h1 class="rules">
+      遊戲說明<br />
+      1.你先攻<br />
+      2.開始時子彈5空5實隨機順序裝填<br />
+      3.子彈射完沒有分出勝負則依照第2點<br />
+      &nbsp&nbsp&nbsp&nbsp重新裝填，並換到你的回合<br />
+      4.血量先歸零為輸家<br />
+      5.惡魔不會使用道具<br />
+      6.惡魔兩滴血以下時對你造成雙倍傷害<br />
+      7.不同道具1回合至多使用1次<br />
+      8.開始或子彈射完時給5個隨機道具<br />
+    </h1>
+    <!-- 當前子彈剩餘量文字 -->
+    <h1 id="ammoCount">當前子彈剩餘:10</h1>
+    <!-- <h1 id="thisBulletType">此發為:</h1> -->
+    <!-- 霰彈槍 -->
+    <div>
+      <h1
+        id="shootingPlayer"
+        style="margin: 0; display: none; cursor: pointer"
+        onclick="shootPlayer()"
+      >
+        射擊自己
+      </h1>
+      <img id="shotgun" src="shotgun.png" alt="shotgun" />
+      <h1
+        id="shootingDemon"
+        style="margin: 0; display: none; cursor: pointer"
+        onclick="shootDemon()"
+      >
+        射擊敵人
+      </h1>
+    </div>
+    <!-- 玩家血量 -->
+    <p class="hearts">
+      <img class="playerHeart" src="heart.png" alt="playerHeart" />
+      <img class="playerHeart" src="heart.png" alt="playerHeart" />
+      <img class="playerHeart" src="heart.png" alt="playerHeart" />
+      <img class="playerHeart" src="heart.png" alt="playerHeart" />
+      <img class="playerHeart" src="heart.png" alt="playerHeart" />
+    </p>
+    <!-- 玩家名稱 -->
+    <div>
+      <h1 style="color: white; margin-top: 0px">player</h1>
+    </div>
+    <!-- 道具存放表格 -->
+    <div>
+      <table border="1">
+        <tr>
+          <td>
+            <!-- 香菸道具 -->
+            <span class="tooltip">
+              <img src="cigarette.png" alt="cigarette" class="hover" />
+              <span class="tooltiptext">回復一滴血</span>
+              <span class="item-count">2</span>
+            </span>
+          </td>
+          <!-- 放大鏡道具 -->
+          <td>
+            <span class="tooltip">
+              <img src="magnifier.png" alt="magnifier" class="hover" />
+              <span class="tooltiptext">查看當前子彈</span>
+              <span class="item-count">5</span>
+            </span>
+          </td>
+          <!-- 啤酒道具 -->
+          <td>
+            <span class="tooltip">
+              <img src="beer.png" alt="beer" class="hover" />
+              <span class="tooltiptext">退出當前子彈</span>
+              <span class="item-count">1</span>
+            </span>
+          </td>
+          <!-- 雙倍傷害道具 -->
+          <td>
+            <span class="tooltip">
+              <img src="BlueBullet.png" alt="BlueBullet" class="hover" />
+              <span class="tooltiptext">當前子彈雙倍傷害</span>
+              <span class="item-count">2</span>
+            </span>
+          </td>
+          <!-- 反轉子彈道具 -->
+          <td>
+            <span class="tooltip">
+              <img src="chocolate.png" alt="chocolate" class="hover" />
+              <span class="tooltiptext">反轉當前子彈</span>
+              <span class="item-count">5</span>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- js -->
+    <script>
+      // 控制霰彈槍點擊後顯示要射誰
+      const shotgun = document.getElementById("shotgun");
+      const shootingPlayer = document.getElementById("shootingPlayer");
+      const shootingDemon = document.getElementById("shootingDemon");
+      let isShootingVisible = false;
+      let DemonHealth = 5; //惡魔血量
+      let playerHealth = 5; //玩家血量
+      let bullets = []; //槍裡的子彈 0是空彈 1是實彈
+
+      // 在遊戲開始時進行子彈的隨機排列
+      window.onload = function () {
+        shuffleBullets();
+      };
+
+      //點一下顯示 再點一下關閉顯示
+      shotgun.addEventListener("click", () => {
+        if (!isShootingVisible) {
+          shootingPlayer.style.display = "block";
+          shootingDemon.style.display = "block";
+          isShootingVisible = true;
+        } else {
+          shootingPlayer.style.display = "none";
+          shootingDemon.style.display = "none";
+          isShootingVisible = false;
+        }
+      });
+
+      //射擊惡魔
+      function shootDemon() {
+        const demonHeartImages = document.querySelectorAll(".demonHeart");
+        const firstDemonHeart = demonHeartImages[0];
+
+        //如果子彈是1就扣血否則不扣血，並都會退出當前子彈
+        if (bullets[0] === 1) {
+          firstDemonHeart.remove();
+          bullets.shift();
+          DemonHealth -= 1;
+        } else {
+          bullets.shift();
+        }
+        // 檢查子彈數量，如果子彈數量為 0，則重新裝填子彈
+        if (bullets.length === 0) {
+          reloadBullets();
+        }
+        // 更新當前子彈剩餘數到 HTML 元素中
+        updateAmmoCount();
+      }
+
+      //射擊自己
+      function shootPlayer() {
+        const playerHeartImages = document.querySelectorAll(".playerHeart");
+        const firstPlayerHeart = playerHeartImages[0];
+        if (bullets[0] === 1) {
+          firstPlayerHeart.remove();
+          bullets.shift();
+          playerHealth -= 1;
+        } else {
+          bullets.shift();
+        }
+        // 檢查子彈數量，如果子彈數量為 0，則重新裝填子彈
+        if (bullets.length === 0) {
+          reloadBullets();
+        }
+        // 更新當前子彈剩餘數到 HTML 元素中
+        updateAmmoCount();
+      }
+      // 更新當前子彈剩餘數到 HTML 元素中
+      function updateAmmoCount() {
+        const ammoCountElement = document.getElementById("ammoCount");
+        ammoCountElement.textContent = "當前子彈剩餘：" + bullets.length;
+      }
+
+      // 取0或1隨機數 用來隨機裝填子彈
+      function getRandomInt() {
+        return Math.floor(Math.random() * 2);
+      }
+
+      // 子彈的隨機排列函數
+      function shuffleBullets() {
+        bullets = []; //清空子彈陣列
+        for (let i = 0; i < 10; i++) {
+          bullets.push(getRandomInt()); //隨機產生子彈並加入到陣列中
+        }
+      }
+
+      // 重新裝填子彈的函數
+      function reloadBullets() {
+        shuffleBullets(); //重新進行子彈的隨機排列
+      }
+    </script>
+  </body>
 </html>
