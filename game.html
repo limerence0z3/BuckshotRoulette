@@ -1,543 +1,653 @@
 <!DOCTYPE html>
 <html>
-  <title>game</title>
+<title>game</title>
 
-  <head>
-    <style>
-      body {
-        background-color: black;
-        font-family: Papyrus, cursive;
-      }
+<head>
+  <style>
+    body {
+      background-color: black;
+      font-family: Papyrus, cursive;
+    }
 
-      div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-      div img {
-        margin: auto;
-        width: 200px;
-        height: auto;
-      }
+    div img {
+      margin: auto;
+      width: 200px;
+      height: auto;
+    }
 
-      div img[alt="shotgun"] {
-        position: relative;
-        width: 40px;
-        margin-top: 0px;
-        margin-left: 100px;
-        margin-right: 100px;
-        margin-bottom: 0px;
-        cursor: pointer;
-      }
-      div img[alt="Demon"] {
-        position: relative;
-        width: 40px;
-        margin-top: 0px;
-        margin-left: 100px;
-        margin-right: 100px;
-        margin-bottom: 0px;
-      }
-      p.hearts {
-        display: flex;
-        justify-content: center;
-      }
+    div img[alt="shotgun"] {
+      position: relative;
+      width: 40px;
+      margin-top: 0px;
+      margin-left: 100px;
+      margin-right: 100px;
+      margin-bottom: 0px;
+      cursor: pointer;
+    }
 
-      p.hearts img {
-        width: 30px;
-      }
+    div img[alt="demon"] {
+      position: relative;
+      margin-top: 0px;
+      margin-left: 100px;
+      margin-right: 100px;
+      margin-bottom: 0px;
+    }
 
-      div table {
-        border: 1px solid white;
-        width: 600px;
-        height: 100px;
-        /* 表格邊框合在一起 */
-        border-collapse: collapse;
-      }
+    p.hearts {
+      display: flex;
+      justify-content: center;
+    }
 
-      div table td {
-        width: 100px;
-        height: 50px;
-        position: relative;
-      }
+    p.hearts img {
+      width: 30px;
+    }
 
-      div table td img {
-        cursor: pointer;
-        width: 100px;
-        height: 100px;
-      }
+    div table {
+      border: 1px solid white;
+      width: 600px;
+      height: 100px;
+      /* 表格邊框合在一起 */
+      border-collapse: collapse;
+    }
 
-      h1 {
-        color: white;
-      }
+    div table td {
+      width: 100px;
+      height: 50px;
+      position: relative;
+    }
 
-      .item-count {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        color: white;
-        font-size: 40px;
-      }
-      .rules {
-        color: white;
-        position: absolute;
-        top: 10px;
-        left: 30px;
-        font-size: 25px;
-      }
-      .ammoMessage {
-        position: absolute;
-        top: 10px;
-        right: 200px;
-        color: white;
-      }
-      #ammoCount {
-        color: white;
-      }
-      #thisBulletType {
-        color: white;
-      }
-      .hover:hover {
-        opacity: 0.8;
-      }
-      .disabled {
-        pointer-events: none;
-        opacity: 0.5;
-      }
+    div table td img {
+      cursor: pointer;
+      width: 100px;
+      height: 100px;
+    }
 
-      /* Tooltip container */
-      .tooltip {
-        position: relative;
-        display: inline-block;
-      }
+    h1 {
+      color: white;
+    }
 
-      /* Tooltip text */
-      .tooltip .tooltiptext {
-        visibility: hidden;
-        bottom: 100%;
-        left: 50%;
-        margin-left: -60px;
-        color: #fff;
-        text-align: center;
-        font-size: 25px;
-        padding: 5px 0;
-        border-radius: 6px;
-        width: 120px;
-        background-color: black;
+    .item-count {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: white;
+      font-size: 40px;
+    }
 
-        /* Position the tooltip text - see examples below! */
-        position: absolute;
-        z-index: 1;
-      }
+    .rules {
+      color: white;
+      position: absolute;
+      top: 10px;
+      left: 30px;
+      font-size: 25px;
+    }
 
-      /* Show the tooltip text when you mouse over the tooltip container */
-      .tooltip:hover .tooltiptext {
-        visibility: visible;
-      }
-    </style>
-  </head>
-  <body>
-    <div>
-      <!-- 惡魔圖片 -->
-      <img src="demon.jpg" alt="demon" />
-    </div>
-    <!-- 惡魔血量 -->
-    <p class="hearts">
-      <img class="demonHeart" src="heart.png" alt="demonHeart" />
-      <img class="demonHeart" src="heart.png" alt="demonHeart" />
-      <img class="demonHeart" src="heart.png" alt="demonHeart" />
-      <img class="demonHeart" src="heart.png" alt="demonHeart" />
-      <img class="demonHeart" src="heart.png" alt="demonHeart" />
-    </p>
-    <!-- 遊戲說明 -->
-    <h1 class="rules">
-      遊戲說明<br />
-      1.你先攻<br />
-      2.開始時子彈5空5實隨機順序裝填<br />
-      3.子彈射完沒有分出勝負則依照第2點<br />
-      &nbsp&nbsp&nbsp&nbsp重新裝填，並換到你的回合<br />
-      4.血量先歸零為輸家<br />
-      5.惡魔不會使用道具<br />
-      6.惡魔兩滴血以下時對你造成雙倍傷害<br />
-      7.不同道具1回合至多使用1次<br />
-      8.開始或子彈射完時給5個隨機道具<br />
-      9.點擊槍後可以選擇射擊誰<br />
-      10.點擊道具後使用道具
+    .ammoMessage {
+      position: absolute;
+      top: 10px;
+      right: 200px;
+      color: white;
+    }
+
+    #ammoCount {
+      color: white;
+    }
+
+    #thisBulletType {
+      color: white;
+    }
+
+    .hover:hover {
+      opacity: 0.8;
+    }
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -60px;
+      color: #fff;
+      text-align: center;
+      font-size: 25px;
+      padding: 5px 0;
+      border-radius: 6px;
+      width: 120px;
+      background-color: black;
+
+      /* Position the tooltip text - see examples below! */
+      position: absolute;
+      z-index: 1;
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <!-- 惡魔圖片 -->
+    <img src="demon.jpg" alt="demon" />
+  </div>
+  <!-- 惡魔血量 -->
+  <p class="hearts">
+    <img class="demonHeart" src="heart.png" alt="demonHeart" />
+    <img class="demonHeart" src="heart.png" alt="demonHeart" />
+    <img class="demonHeart" src="heart.png" alt="demonHeart" />
+    <img class="demonHeart" src="heart.png" alt="demonHeart" />
+    <img class="demonHeart" src="heart.png" alt="demonHeart" />
+  </p>
+  <!-- 音效 -->
+  <audio id="shotgunShotSound" src="shotgun shooting.mp4"></audio>
+  <audio id="shotgunEmptyShotSound" src="shotgun empty shot.mp4"></audio>
+  <!-- 遊戲說明 -->
+  <h1 class="rules">
+    遊戲說明<br />
+    1.你先攻<br />
+    2.開始時子彈5空5實隨機順序裝填<br />
+    3.子彈射完沒有分出勝負則依照第2點<br />
+    &nbsp&nbsp&nbsp&nbsp重新裝填，並換到你的回合<br />
+    4.血量先歸零為輸家<br />
+    5.惡魔不會使用道具<br />
+    6.惡魔兩滴血以下時對你造成雙倍傷害<br />
+    7.不同道具1回合至多使用1次<br />
+    8.開始或子彈射完時給5個隨機道具<br />
+    9.點擊槍後可以選擇射擊誰<br />
+    10.點擊道具後使用道具
+  </h1>
+  <div>
+    <span class="ammoMessage">
+      <!-- 當前子彈剩餘量文字 -->
+      <h1 id="ammoCount">當前子彈剩餘:10</h1>
+      <!-- 此發子彈類型 -->
+      <h1 id="thisBulletType">此發為:</h1>
+      <!-- 道具效果 -->
+      <h1 id="itemEffect">道具:</h1>
+    </span>
+  </div>
+  <!-- 霰彈槍 -->
+  <div>
+    <h1 id="shootingPlayer" class="hover" style="margin: 0; display: none; cursor: pointer" onclick="shootPlayer()">
+      射擊自己
     </h1>
-    <div>
-      <span class="ammoMessage">
-        <!-- 當前子彈剩餘量文字 -->
-        <h1 id="ammoCount">當前子彈剩餘:10</h1>
-        <!-- 此發子彈類型 -->
-        <h1 id="thisBulletType">此發為:</h1>
-        <!-- 道具效果 -->
-        <h1 id="itemEffect">道具:</h1>
-      </span>
-    </div>
-    <!-- 霰彈槍 -->
-    <div>
-      <h1
-        id="shootingPlayer"
-        class="hover"
-        style="margin: 0; display: none; cursor: pointer"
-        onclick="shootPlayer()"
-      >
-        射擊自己
-      </h1>
-      <img id="shotgun" src="shotgun.png" alt="shotgun" class="hover" />
-      <h1
-        id="shootingDemon"
-        class="hover"
-        style="margin: 0; display: none; cursor: pointer"
-        onclick="shootDemon()"
-      >
-        射擊敵人
-      </h1>
-    </div>
-    <!-- 玩家血量 -->
-    <p class="hearts">
-      <img class="playerHeart" src="heart.png" alt="playerHeart" />
-      <img class="playerHeart" src="heart.png" alt="playerHeart" />
-      <img class="playerHeart" src="heart.png" alt="playerHeart" />
-      <img class="playerHeart" src="heart.png" alt="playerHeart" />
-      <img class="playerHeart" src="heart.png" alt="playerHeart" />
-    </p>
-    <!-- 玩家名稱 -->
-    <div>
-      <h1 style="color: white; margin-top: 0px">player</h1>
-    </div>
-    <!-- 道具存放表格 -->
-    <div>
-      <table border="1">
-        <tr>
-          <td>
-            <!-- 香菸道具 -->
-            <span class="tooltip">
-              <img
-                src="cigarette.png"
-                alt="cigarette"
-                class="hover"
-                onclick="useCigarette()"
-              />
-              <span class="tooltiptext">回復一滴血</span>
-              <span id="cigaretteCount" class="item-count">2</span>
-            </span>
-          </td>
-          <!-- 放大鏡道具 -->
-          <td>
-            <span class="tooltip">
-              <img
-                src="magnifier.png"
-                alt="magnifier"
-                class="hover"
-                onclick="useMagnifier()"
-              />
-              <span class="tooltiptext">查看當前子彈</span>
-              <span id="magnifierCount" class="item-count">2</span>
-            </span>
-          </td>
-          <!-- 啤酒道具 -->
-          <td>
-            <span class="tooltip">
-              <img
-                src="beer.png"
-                alt="beer"
-                class="hover"
-                onclick="useBeer()"
-              />
-              <span class="tooltiptext">退出當前子彈</span>
-              <span id="beerCount" class="item-count">2</span>
-            </span>
-          </td>
-          <!-- 雙倍傷害道具 -->
-          <td>
-            <span class="tooltip">
-              <img
-                src="blueBullet.png"
-                alt="blueBullet"
-                class="hover"
-                onclick="useBlueBullet()"
-              />
-              <span class="tooltiptext">當前子彈雙倍傷害</span>
-              <span id="blueBulletCount" class="item-count">2</span>
-            </span>
-          </td>
-          <!-- 反轉子彈道具 -->
-          <td>
-            <span class="tooltip">
-              <img src="chocolate.png" alt="chocolate" class="hover" />
-              <span class="tooltiptext">反轉當前子彈</span>
-              <span id="chocolateCount" class="item-count">2</span>
-            </span>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <img id="shotgun" src="shotgun.png" alt="shotgun" class="hover" />
+    <h1 id="shootingDemon" class="hover" style="margin: 0; display: none; cursor: pointer" onclick="shootDemon()">
+      射擊敵人
+    </h1>
+  </div>
+  <!-- 玩家血量 -->
+  <p class="hearts">
+    <img class="playerHeart" src="heart.png" alt="playerHeart" />
+    <img class="playerHeart" src="heart.png" alt="playerHeart" />
+    <img class="playerHeart" src="heart.png" alt="playerHeart" />
+    <img class="playerHeart" src="heart.png" alt="playerHeart" />
+    <img class="playerHeart" src="heart.png" alt="playerHeart" />
+  </p>
+  <!-- 玩家名稱 -->
+  <div>
+    <h1 style="color: white; margin-top: 0px">player</h1>
+  </div>
+  <!-- 道具存放表格 -->
+  <div>
+    <table border="1">
+      <tr>
+        <td>
+          <!-- 香菸道具 -->
+          <span class="tooltip">
+            <img src="cigarette.png" alt="cigarette" class="hover" onclick="useCigarette()" />
+            <span class="tooltiptext">回復一滴血</span>
+            <span id="cigaretteCount" class="item-count">0</span>
+          </span>
+        </td>
+        <!-- 放大鏡道具 -->
+        <td>
+          <span class="tooltip">
+            <img src="magnifier.png" alt="magnifier" class="hover" onclick="useMagnifier()" />
+            <span class="tooltiptext">查看當前子彈</span>
+            <span id="magnifierCount" class="item-count">0</span>
+          </span>
+        </td>
+        <!-- 啤酒道具 -->
+        <td>
+          <span class="tooltip">
+            <img src="beer.png" alt="beer" class="hover" onclick="useBeer()" />
+            <span class="tooltiptext">退出當前子彈</span>
+            <span id="beerCount" class="item-count">0</span>
+          </span>
+        </td>
+        <!-- 雙倍傷害道具 -->
+        <td>
+          <span class="tooltip">
+            <img src="blueBullet.png" alt="blueBullet" class="hover" onclick="useBlueBullet()" />
+            <span class="tooltiptext">當前子彈雙倍傷害</span>
+            <span id="blueBulletCount" class="item-count">0</span>
+          </span>
+        </td>
+        <!-- 反轉子彈道具 -->
+        <td>
+          <span class="tooltip">
+            <img src="chocolate.png" alt="chocolate" class="hover" onclick="useChocolate()" />
+            <span class="tooltiptext">反轉當前子彈</span>
+            <span id="chocolateCount" class="item-count">0</span>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-    <!-- js -->
-    <script>
-      // 控制霰彈槍點擊後顯示要射誰
-      const shotgun = document.getElementById("shotgun");
-      const shootingPlayer = document.getElementById("shootingPlayer");
-      const shootingDemon = document.getElementById("shootingDemon");
-      let isShootingVisible = false;
-      let DemonHealth = 5; //惡魔血量
-      let playerHealth = 5; //玩家血量
-      let bullets = []; //槍裡的子彈 0是空彈 1是實彈
-      let cigarettesTotal = 2;
-      let magnifierTotal = 2;
-      let beerTotal = 2;
-      let BlueBulletTotla = 2;
-      let chocolateTotal = 2;
-      let isBlueBulletActive = false; // 儲存藍色子彈的狀態
-      // 在遊戲開始時進行子彈的隨機排列
-      window.onload = function () {
-        shuffleBullets();
-      };
+  <!-- js -->
+  <script>
+    // 控制霰彈槍點擊後顯示要射誰
+    const shotgun = document.getElementById("shotgun");
+    const shootingPlayer = document.getElementById("shootingPlayer");
+    const shootingDemon = document.getElementById("shootingDemon");
+    let isShootingVisible = false;
+    let DemonHealth = 5; //惡魔血量
+    let playerHealth = 5; //玩家血量
+    let bullets = []; //槍裡的子彈 0是空彈 1是實彈
+    let cigarettesTotal = 0;
+    let magnifierTotal = 0;
+    let beerTotal = 0;
+    let blueBulletTotal = 0;
+    let chocolateTotal = 0;
+    let isBlueBulletActive = false; // 儲存藍色子彈的狀態
+    //用來檢查更新道具數量
+    const cigaretteImage = document.querySelector("[alt='cigarette']");
+    const newCigaretteCount = document.getElementById("cigaretteCount");
+    const magnifierImage = document.querySelector("[alt='magnifier']");
+    const newMagnifierCount = document.getElementById("magnifierCount");
+    const beerImage = document.querySelector("[alt='beer']");
+    const newBeerCount = document.getElementById("beerCount");
+    const blueBulletImage = document.querySelector("[alt='blueBullet']");
+    const newBlueBulletCount = document.getElementById("blueBulletCount");
+    const chocolateImage = document.querySelector("[alt='chocolate']");
+    const newChocolateCount = document.getElementById("chocolateCount");
 
-      //點一下顯示 再點一下關閉顯示
-      shotgun.addEventListener("click", () => {
-        if (!isShootingVisible) {
-          shootingPlayer.style.display = "block";
-          shootingDemon.style.display = "block";
-          isShootingVisible = true;
+    // 在遊戲開始時進行子彈的隨機排列
+    window.onload = function () {
+      giveItem();
+      checkItemAvailability(cigaretteImage, cigarettesTotal);
+      checkItemAvailability(magnifierImage, magnifierTotal);
+      checkItemAvailability(beerImage, beerTotal);
+      checkItemAvailability(blueBulletImage, blueBulletTotal);
+      checkItemAvailability(chocolateImage, chocolateTotal);
+      shuffleBullets();
+    };
+
+    //點一下顯示 再點一下關閉顯示
+    shotgun.addEventListener("click", () => {
+      if (!isShootingVisible) {
+        shootingPlayer.style.display = "block";
+        shootingDemon.style.display = "block";
+        isShootingVisible = true;
+      } else {
+        shootingPlayer.style.display = "none";
+        shootingDemon.style.display = "none";
+        isShootingVisible = false;
+      }
+    });
+
+
+    //播放音效的function
+    function playSound(soundId) {
+      return new Promise((resolve) => {
+        const sound = document.getElementById(soundId);
+        if (sound) {
+          sound.currentTime = 0;
+          sound.play(); // 播放音效
+          sound.onended = resolve;
         } else {
-          shootingPlayer.style.display = "none";
-          shootingDemon.style.display = "none";
-          isShootingVisible = false;
+          resolve(); // 如果音效不存在，立即完成 Promise
         }
       });
+    }
 
-      //射擊惡魔
-      function shootDemon() {
-        const demonHeartImages = document.querySelectorAll(".demonHeart");
-        const firstDemonHeart = demonHeartImages[0];
-        //重置道具效果
-        reloadItemEffection();
-        //判斷此發為空彈還是實彈
-        thisBulletType(bullets[0]);
-        //如果子彈是1就扣血否則不扣血，並都會退出當前子彈
-        if (bullets[0] === 1) {
-          firstDemonHeart.remove();
-          bullets.shift();
-          DemonHealth -= 1;
-        } else {
-          bullets.shift();
-        }
-        // 檢查子彈數量，如果子彈數量為 0，則重新裝填子彈
-        if (bullets.length === 0) {
-          reloadBullets();
-        }
-        // 更新當前子彈剩餘數到 HTML 元素中
-        updateAmmoCount();
-      }
 
-      //射擊自己
-      function shootPlayer() {
-        const playerHeartImages = document.querySelectorAll(".playerHeart");
-        const firstPlayerHeart = playerHeartImages[0];
-        //重置道具效果
-        reloadItemEffection();
-        //判斷此發為空彈還是實彈
-        thisBulletType(bullets[0]);
-        //如果子彈是1就扣血否則不扣血，並都會退出當前子彈
-        if (bullets[0] === 1) {
-          if (isBlueBulletActive) {
-            if (playerHealth > 1) {
-              firstPlayerHeart.remove(); // Remove one heart
-              firstPlayerHeart.remove(); // Remove another heart (double damage)
-              playerHealth -= 2; // Inflict double damage
-            } else {
-              firstPlayerHeart.remove(); // Remove the only heart left
-              playerHealth = 0; // Player health becomes 0
+    //射擊惡魔
+    async function shootDemon() {
+      const demonHeartImages = document.querySelectorAll(".demonHeart");
+      // 重置道具效果
+      reloadItemEffection();
+      document.getElementById("thisBulletType").innerHTML = '此發為:';
+
+      if (bullets[0] === 1) { // 子彈是實彈
+        await playSound('shotgunShotSound')
+        if (isBlueBulletActive) {
+          // 藍色子彈激活時，造成雙倍傷害
+          if (DemonHealth > 1) {
+            demonHeartImages[0].remove(); // 移除第一顆心
+            if (demonHeartImages[1]) {
+              demonHeartImages[1].remove(); // 移除第二顆心（如果存在）
             }
-            bullets.shift(); // Remove the bullet
-            isBlueBulletActive = false; // Reset blue bullet status
+            DemonHealth -= 2; // 扣除兩滴血
           } else {
-            firstPlayerHeart.remove(); // Remove one heart
-            bullets.shift(); // Remove the bullet
-            playerHealth -= 1; // Inflict regular damage
+            // 如果惡魔血量不夠兩滴，直接扣到0
+            demonHeartImages[0].remove(); // 移除剩下的唯一一顆心
+            DemonHealth = 0; // 惡魔血量變為0
           }
+          isBlueBulletActive = false; // 重置藍色子彈狀態
         } else {
-          bullets.shift();
+          // 普通實彈，造成普通傷害
+          demonHeartImages[0].remove(); // 移除一顆心
+          DemonHealth -= 1; // 扣除一滴血
         }
-        // 檢查子彈數量，如果子彈數量為 0，則重新裝填子彈
+        // 判斷此發為空彈還是實彈
+        thisBulletType(bullets[0]);
+        bullets.shift(); // 移除當前子彈
+      } else {
+        await playSound('shotgunEmptyShotSound')
+        // 判斷此發為空彈還是實彈
+        thisBulletType(bullets[0]);
+        bullets.shift(); // 空彈，僅移除子彈
+      }
+
+      // 檢查子彈數量，如果子彈數量為0，則重新裝填子彈，同時發道具
+      if (bullets.length === 0) {
+        giveItem();
+        reloadBullets();
+      }
+
+      // 更新當前子彈剩餘數到HTML元素中
+      updateAmmoCount();
+
+      // 檢查惡魔血量，如果惡魔血量小於等於0，則進行相應處理
+      if (DemonHealth <= 0) {
+        handleDemonDefeat(); // 處理惡魔被擊敗的情況
+      }
+    }
+
+
+    //射擊自己
+    async function shootPlayer() {
+      const playerHeartImages = document.querySelectorAll(".playerHeart");
+      // 重置道具效果
+      reloadItemEffection();
+      document.getElementById("thisBulletType").innerHTML = '此發為:';
+
+      if (bullets[0] === 1) { // 子彈是實彈
+        await playSound('shotgunShotSound')
+        if (isBlueBulletActive) {
+          // 藍色子彈激活時，造成雙倍傷害
+          if (playerHealth > 1) {
+            playerHeartImages[0].remove(); // 移除第一顆心
+            playerHeartImages[1].remove(); // 移除第二顆心
+            playerHealth -= 2; // 扣除兩滴血
+          } else {
+            // 如果玩家血量不夠兩滴，直接扣到0
+            playerHeartImages[0].remove(); // 移除剩下的唯一一顆心
+            playerHealth = 0; // 玩家血量變為0
+          }
+          isBlueBulletActive = false; // 重置藍色子彈狀態
+        } else {
+          // 普通實彈，造成普通傷害
+          playerHeartImages[0].remove(); // 移除一顆心
+          playerHealth -= 1; // 扣除一滴血
+        }
+        // 判斷此發為空彈還是實彈
+        thisBulletType(bullets[0]);
+        bullets.shift(); // 移除當前子彈
+      } else {
+        await playSound('shotgunEmptyShotSound')
+        // 判斷此發為空彈還是實彈
+        thisBulletType(bullets[0]);
+        bullets.shift(); // 空彈，僅移除子彈
+      }
+
+      // 檢查子彈數量，如果子彈數量為0，則重新裝填子彈
+      if (bullets.length === 0) {
+        giveItem();
+        reloadBullets();
+      }
+      // 更新當前子彈剩餘數到HTML元素中
+      updateAmmoCount();
+
+      // 檢查玩家血量，如果玩家血量小於等於0，則進行遊戲結束處理
+      if (playerHealth <= 0) {
+        endGame();
+      }
+    }
+
+    //更新當前子彈剩餘數到 HTML 元素中
+    function updateAmmoCount() {
+      const ammoCountElement = document.getElementById("ammoCount");
+      ammoCountElement.textContent = "當前子彈剩餘：" + bullets.length;
+    }
+
+    //顯示此發為空彈還是實彈
+    function thisBulletType(bullets) {
+      let BulletType = "";
+      if (bullets === 1) {
+        BulletType = "實彈";
+      } else {
+        BulletType = "空彈";
+      }
+      const thisBulletTypeElement = document.getElementById("thisBulletType");
+      thisBulletTypeElement.textContent = "此發為: " + BulletType;
+    }
+
+    // 取0或1隨機數 用來隨機裝填子彈
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    // 子彈的隨機排列函數
+    function shuffleBullets() {
+      bullets = []; // 清空子彈陣列
+      //加入5個0和5個1
+      for (let i = 0; i < 5; i++) {
+        bullets.push(0);
+        bullets.push(1);
+      }
+      // 隨機排列子彈
+      bullets.sort(() => Math.random() - 0.5);
+    }
+
+    // 重新裝填子彈的函數
+    function reloadBullets() {
+      shuffleBullets(); //重新進行子彈的隨機排列
+    }
+    //發放道具
+    function giveItem() {
+      for (let i = 0; i < 5; i++) {
+        let randomIndex = Math.floor(Math.random() * 5);
+        switch (randomIndex) {
+          case 0:
+            cigarettesTotal += 1;
+            newCigaretteCount.textContent = cigarettesTotal;
+            break;
+          case 1:
+            magnifierTotal += 1;
+            newMagnifierCount.textContent = magnifierTotal;
+            break;
+          case 2:
+            beerTotal += 1;
+            newBeerCount.textContent = beerTotal;
+            break;
+          case 3:
+            blueBulletTotal += 1;
+            newBlueBulletCount.textContent = blueBulletTotal;
+            break;
+          case 4:
+            chocolateTotal += 1;
+            newChocolateCount.textContent = chocolateTotal;
+            break;
+        }
+      }
+    }
+
+    //重置道具效果
+    function reloadItemEffection() {
+      let ItemEffection = document.getElementById("itemEffect");
+      ItemEffection.textContent = "道具: ";
+    }
+
+    // 檢查道具數量，如果為 0，則禁用道具的點擊事件
+    function checkItemAvailability(itemElement, itemCount) {
+      if (itemCount <= 0) {
+        itemElement.classList.add("disabled");
+      } else {
+        itemElement.classList.remove("disabled");
+      }
+    }
+
+    // 點擊香菸道具時觸發的函數，玩家回復一滴血
+    function useCigarette() {
+      const playerHeartImages = document.querySelectorAll(".playerHeart");
+      const lastPlayerHeart = playerHeartImages[playerHeartImages.length - 1];
+      let ItemEffection = document.getElementById("itemEffect");
+
+      // 先顯示道具效果
+      ItemEffection.textContent = "道具: ";
+
+      // 檢查玩家血量是否已滿
+      if (playerHeartImages.length < 5) {
+        // 添加一滴血
+        const newHeart = document.createElement("img");
+        newHeart.src = "heart.png";
+        newHeart.alt = "playerHeart";
+        newHeart.className = "playerHeart";
+        lastPlayerHeart.parentNode.insertBefore(
+          newHeart,
+          lastPlayerHeart.nextSibling
+        );
+        // 更新玩家血量
+        playerHealth += 1;
+        // 更新道具效果文字
+        ItemEffection.innerText += "回復了一滴血";
+      } else {
+        // 更新道具效果文字
+        ItemEffection.innerText += "浪費了一包菸...";
+      }
+      //更新香菸數量
+      cigarettesTotal -= 1;
+      newCigaretteCount.textContent = cigarettesTotal;
+      // 檢查道具數量，如果為 0，則禁用香菸點擊事件
+      checkItemAvailability(cigaretteImage, cigarettesTotal);
+    }
+
+    //使用放大鏡來查看當前子彈
+    function useMagnifier() {
+      let ItemEffection = document.getElementById("itemEffect");
+      const thisBulletTypeElement = document.getElementById("thisBulletType");
+
+      // 先顯示道具效果
+      ItemEffection.textContent = "道具: ";
+      if (bullets.length > 0) {
+        const currentBullet = bullets[0];
+        if (currentBullet === 1) {
+          ItemEffection.innerText += "下一發為實彈";
+        } else {
+          ItemEffection.innerText += "下一發為空彈";
+        }
+      }
+      magnifierTotal -= 1;
+      newMagnifierCount.textContent = magnifierTotal;
+      // 檢查道具數量，如果為 0，則禁用放大鏡點擊事件
+      checkItemAvailability(magnifierImage, magnifierTotal);
+    }
+
+    // 使用啤酒道具來退出當前的一顆子彈
+    function useBeer() {
+      let ItemEffection = document.getElementById("itemEffect");
+
+
+      // 先顯示道具效果
+      ItemEffection.textContent = "道具: ";
+
+      // 判斷是否還有子彈可以退出
+      if (bullets.length > 0) {
+        // 判斷最後一發子彈的類型
+        let lastBulletType;
+        if (bullets[bullets.length - 1] === 1) {
+          lastBulletType = "實彈";
+        } else {
+          lastBulletType = "空彈";
+        }
+        // 移除最後一顆子彈
+        bullets.pop();
+        // 檢查子彈數量，如果子彈數量為0，則重新裝填子彈
         if (bullets.length === 0) {
+          giveItem();
           reloadBullets();
         }
-        // 更新當前子彈剩餘數到 HTML 元素中
+        // 更新子彈數量
         updateAmmoCount();
+        // 更新道具效果文字，顯示退出的是實彈還是空彈
+        ItemEffection.innerText += "退出了一顆" + lastBulletType;
+      } else {
+        // 更新道具效果文字
+        ItemEffection.innerText += "子彈已經射完了";
       }
 
-      //更新當前子彈剩餘數到 HTML 元素中
-      function updateAmmoCount() {
-        const ammoCountElement = document.getElementById("ammoCount");
-        ammoCountElement.textContent = "當前子彈剩餘：" + bullets.length;
+      // 更新啤酒道具數量
+      beerTotal -= 1;
+      newBeerCount.textContent = beerTotal;
+
+      // 檢查道具數量，如果為 0，則禁用啤酒點擊事件
+      checkItemAvailability(beerImage, beerTotal);
+    }
+
+    //使用藍色子彈，使用後下次射擊造成雙倍傷害，敵人自己都是，射完會更新回原來的普通子彈。
+    function useBlueBullet() {
+      const ItemEffection = document.getElementById("itemEffect");
+      // 先顯示道具效果
+      ItemEffection.textContent = "道具: ";
+      ItemEffection.innerText += "下一發子彈造成雙倍傷害";
+
+      // 將藍色子彈標記為已啟動
+      isBlueBulletActive = true;
+
+      // 更新藍色子彈數量
+      blueBulletTotal -= 1;
+      newBlueBulletCount.textContent = blueBulletTotal;
+
+      // 檢查道具數量，如果為 0，則禁用藍色子彈點擊事件
+      checkItemAvailability(blueBulletImage, blueBulletTotal);
+    }
+
+    //使用巧克力反轉當前子彈，實變空，空變實
+    function useChocolate() {
+      let ItemEffection = document.getElementById("itemEffect");
+
+      // 先顯示道具效果
+      ItemEffection.textContent = "道具: ";
+      ItemEffection.innerText += "反轉了當前子彈";
+
+      //Swap 當前bullet
+      if (bullets[0] === 1) {
+        bullets[0] = 0;
       }
-
-      //顯示此發為空彈還是實彈
-      function thisBulletType(bullets) {
-        let BulletType = "";
-        if (bullets === 1) {
-          BulletType = "實彈";
-        } else {
-          BulletType = "空彈";
-        }
-        const thisBulletTypeElement = document.getElementById("thisBulletType");
-        thisBulletTypeElement.textContent = "此發為: " + BulletType;
+      else {
+        bullets[0] = 1;
       }
+      // 更新巧克力數量
+      chocolateTotal -= 1;
+      newChocolateCount.textContent = chocolateTotal;
 
-      // 取0或1隨機數 用來隨機裝填子彈
-      function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-      }
+      // 檢查道具數量，如果為 0，則禁用巧克力點擊事件
+      checkItemAvailability(chocolateImage, chocolateTotal);
+    }
+  </script>
+</body>
 
-      // 子彈的隨機排列函數
-      function shuffleBullets() {
-        bullets = []; // 清空子彈陣列
-        //加入5個0和5個1
-        for (let i = 0; i < 5; i++) {
-          bullets.push(0);
-          bullets.push(1);
-        }
-        // 隨機排列子彈
-        bullets.sort(() => Math.random() - 0.5);
-      }
-
-      // 重新裝填子彈的函數
-      function reloadBullets() {
-        shuffleBullets(); //重新進行子彈的隨機排列
-      }
-      //重置道具效果
-      function reloadItemEffection() {
-        let ItemEffection = document.getElementById("itemEffect");
-        ItemEffection.textContent = "道具: ";
-      }
-
-      // 檢查道具數量，如果為 0，則禁用道具的點擊事件
-      function checkItemAvailability(itemElement, itemCount) {
-        if (itemCount === 0) {
-          itemElement.classList.add("disabled");
-        } else {
-          itemElement.classList.remove("disabled");
-        }
-      }
-
-      // 點擊香菸道具時觸發的函數，玩家回復一滴血
-      function useCigarette() {
-        const playerHeartImages = document.querySelectorAll(".playerHeart");
-        const lastPlayerHeart = playerHeartImages[playerHeartImages.length - 1];
-        let ItemEffection = document.getElementById("itemEffect");
-        const newCigaretteCount = document.getElementById("cigaretteCount");
-
-        // 先顯示道具效果
-        ItemEffection.textContent = "道具: ";
-
-        // 檢查玩家血量是否已滿
-        if (playerHeartImages.length < 5) {
-          // 添加一滴血
-          const newHeart = document.createElement("img");
-          newHeart.src = "heart.png";
-          newHeart.alt = "playerHeart";
-          newHeart.className = "playerHeart";
-          lastPlayerHeart.parentNode.insertBefore(
-            newHeart,
-            lastPlayerHeart.nextSibling
-          );
-          // 更新玩家血量
-          playerHealth += 1;
-          // 更新道具效果文字
-          ItemEffection.innerText += "回復了一滴血";
-        } else {
-          // 更新道具效果文字
-          ItemEffection.innerText += "浪費了一包菸...";
-        }
-        //更新香菸數量
-        cigarettesTotal -= 1;
-        newCigaretteCount.textContent = cigarettesTotal;
-        // 檢查道具數量，如果為 0，則禁用香菸點擊事件
-        const cigaretteImage = document.querySelector("[alt='cigarette']");
-        checkItemAvailability(cigaretteImage, cigarettesTotal);
-      }
-
-      //使用放大鏡來查看當前子彈
-      function useMagnifier() {
-        const thisBulletTypeElement = document.getElementById("thisBulletType");
-        let ItemEffection = document.getElementById("itemEffect");
-        const newMagnifierCount = document.getElementById("magnifierCount");
-        // 先顯示道具效果
-        ItemEffection.textContent = "道具: ";
-        if (bullets.length > 0) {
-          const currentBullet = bullets[0];
-          if (currentBullet === 1) {
-            ItemEffection.innerText += "此發為實彈";
-          } else {
-            ItemEffection.innerText += "此發為空彈";
-          }
-        }
-        magnifierTotal -= 1;
-        newMagnifierCount.textContent = magnifierTotal;
-        // 檢查道具數量，如果為 0，則禁用放大鏡點擊事件
-        const magnifierImage = document.querySelector("[alt='magnifier']");
-        checkItemAvailability(magnifierImage, magnifierTotal);
-      }
-
-      // 使用啤酒道具來退出當前的一顆子彈
-      function useBeer() {
-        let ItemEffection = document.getElementById("itemEffect");
-        const newBeerCount = document.getElementById("beerCount");
-
-        // 先顯示道具效果
-        ItemEffection.textContent = "道具: ";
-
-        // 判斷是否還有子彈可以退出
-        if (bullets.length > 0) {
-          // 判斷最後一發子彈的類型
-          let lastBulletType;
-          if (bullets[bullets.length - 1] === 1) {
-            lastBulletType = "實彈";
-          } else {
-            lastBulletType = "空彈";
-          }
-          // 移除最後一顆子彈
-          bullets.pop();
-          // 更新子彈數量
-          updateAmmoCount();
-          // 更新道具效果文字，顯示退出的是實彈還是空彈
-          ItemEffection.innerText += "退出了一顆" + lastBulletType;
-        } else {
-          // 更新道具效果文字
-          ItemEffection.innerText += "子彈已經射完了";
-        }
-
-        // 更新啤酒道具數量
-        beerTotal -= 1;
-        newBeerCount.textContent = beerTotal;
-
-        // 檢查道具數量，如果為 0，則禁用啤酒點擊事件
-        const beerImage = document.querySelector("[alt='beer']");
-        checkItemAvailability(beerImage, beerTotal);
-      }
-
-      function useBlueBullet() {
-        const ItemEffection = document.getElementById("itemEffect");
-        const newBlueBulletCount = document.getElementById("blueBulletCount");
-
-        // 先顯示道具效果
-        ItemEffection.textContent = "道具: ";
-        ItemEffection.innerText += "下一發子彈造成雙倍傷害";
-
-        // 將藍色子彈標記為已啟動
-        isBlueBulletActive = true;
-
-        // 更新藍色子彈數量
-        BlueBulletTotla -= 1;
-        newBlueBulletCount.textContent = BlueBulletTotla;
-
-        // 檢查道具數量，如果為 0，則禁用藍色子彈點擊事件
-        const blueBulletImage = document.querySelector("[alt='blueBullet']");
-        checkItemAvailability(blueBulletImage, BlueBulletTotla);
-      }
-    </script>
-  </body>
 </html>
