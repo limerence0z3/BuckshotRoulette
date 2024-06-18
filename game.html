@@ -189,7 +189,7 @@
     3.子彈射完沒有結束則依第2點重新裝填<br />
     4.血量先歸零為輸家<br />
     5.惡魔不會使用道具<br />
-    6.惡魔兩滴血以下時對你造成雙倍傷害<br />
+    6.惡魔3滴血以下時對你造成雙倍傷害<br />
     7.不同道具1回合至多使用1次<br />
     8.開始或子彈射完時給5個隨機道具<br />
     9.點擊槍後可以選擇射擊誰<br />
@@ -442,7 +442,7 @@
         }
       }
       //如果惡魔血量小於2就變換圖片
-      if (DemonHealth <= 2) {
+      if (DemonHealth <= 3) {
         let demonImage = document.getElementById('demonPicture');
         demonImage.src = "picture/demon_02.png";
       }
@@ -472,7 +472,7 @@
         demonTurnCheck = 1
         playerTurnCheck = 0
         await playSound('shotgunShotSound');
-        if (isBlueBulletActive || (turnCheck == 1 && DemonHealth <= 2)) {
+        if (isBlueBulletActive || (turnCheck == 1 && DemonHealth <= 3)) {
           // 藍色子彈激活時，造成雙倍傷害
           if (playerHealth > 1) {
             playerHeartImages[0].remove(); // 移除第一顆心
